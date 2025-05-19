@@ -34,7 +34,8 @@ set(CMAKE_CXX_LINK_EXECUTABLE
 function(add_target target_name source_file)
         add_executable(${target_name} ${source_file})
 
-        target_compile_options(${target_name} PRIVATE -O0 -S -emit-llvm
+        target_compile_options(${target_name}
+                PRIVATE -O0 -S -g -emit-llvm
                 -Wno-unused-command-line-argument
                 -Wno-return-stack-address
                 -Xclang -disable-O0-optnone
@@ -58,7 +59,7 @@ function(add_target target_name source_file)
         # Run TSan
         add_custom_command(TARGET ${target_name} POST_BUILD
                 COMMAND ${CLANG_EXECUTABLE}
-                -S -emit-llvm -fsanitize=thread
+                -S -g -emit-llvm -fsanitize=thread
                 -fno-inline-functions
                 -mllvm -tsan-use-dominance-analysis
                 -mllvm -debug-only=tsan,

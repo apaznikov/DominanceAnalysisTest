@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <stdatomic.h> // For C11 atomics
 
-// #define TEST_SIMPLE_DOMINANCE
+#define TEST_SIMPLE_DOMINANCE
 // #define TEST_DOMINANCE_THROUGH_IF
 // #define TEST_DOMINANCE_UNCLEAR_PATH_CALL
 // #define TEST_DOMINANCE_UNCLEAR_PATH_SYNC
 // #define TEST_DOMINANCE_READ_AFTER_WRITE
 // #define TEST_DOMINANCE_WRITE_AFTER_READ
 // #define TEST_DOMINANCE_LOOP
-#define TEST_NO_DOMINANCE_PARALLEL_BRANCHES
+// #define TEST_NO_DOMINANCE_PARALLEL_BRANCHES
 
 // Common global variables that might be used by multiple tests
 int g1;
@@ -90,13 +90,13 @@ void *thread_function_for_tests(void *arg) {
     printf("--- Running TEST_DOMINANCE_UNCLEAR_PATH_CALL ---\n");
     // Access 1 (should be instrumented)
     g_common = 1;
-    printf("g_common_access1 = %d\n", g_common);
+    // printf("g_common_access1 = %d\n", g_common);
 
     potentially_dangerous_call_func();
 
     // Access 2 to the same address (should NOT be removed, as potentially_dangerous_call_func() breaks the "clear" path)
     g_common = 2;
-    printf("g_common_access2 = %d\n", g_common);
+    // printf("g_common_access2 = %d\n", g_common);
     printf("--- Finished TEST_DOMINANCE_UNCLEAR_PATH_CALL ---\n\n");
 #endif
 
@@ -104,15 +104,15 @@ void *thread_function_for_tests(void *arg) {
     // --- Test 4: Dominance, but path is "not clear" due to a synchronization primitive ---
     printf("--- Running TEST_DOMINANCE_UNCLEAR_PATH_SYNC ---\n");
     // Access 1 (should be instrumented)
-    g_common = 1;
-    printf("g_common_access1 = %d\n", g_common);
+    g_common = 111;
+    // printf("g_common_access1 = %d\n", g_common);
 
     // Synchronization primitive (e.g., memory fence or atomic operation with barrier semantics)
     // __sync_synchronize(); // GCC specific
     atomic_thread_fence(memory_order_seq_cst); // C11
 
     // Access 2 to the same address (should NOT be removed, as the barrier breaks the "clear" path)
-    g_common = 2;
+    g_common = 222;
     printf("g_common_access2 = %d\n", g_common);
     printf("--- Finished TEST_DOMINANCE_UNCLEAR_PATH_SYNC ---\n\n");
 #endif
@@ -140,7 +140,7 @@ void *thread_function_for_tests(void *arg) {
     // --- Test 6: Dominance, different access types (write after read - should not be removed by read's dominance) ---
     printf("--- Running TEST_DOMINANCE_WRITE_AFTER_READ ---\n");
     g_common = 111; // Initialization
-    printf("g_common_write_access = %d\n", g_common);
+    printf("g_common_write_access\n");
 
     // Access 1: Read (should be instrumented)
     int val_war = g_common;
