@@ -71,6 +71,7 @@ function(add_target target_name source_file)
 endfunction()
 
 add_target(DominanceAnalysisTest DominanceAnalysisTest.c)
+add_target(DominanceAnalysisTestWithCalls DominanceAnalysisTestWithCalls.c)
 
 ####################################################################################
 
