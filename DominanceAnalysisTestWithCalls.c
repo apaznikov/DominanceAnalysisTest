@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <stdatomic.h> // For C11 atomics
 
-// #define TEST_CALL_CLEAN_FUNCTION
+#define TEST_CALL_CLEAN_FUNCTION
 // #define TEST_CALL_DANGEROUS_INTRINSIC
 // #define TEST_CALL_TRANSITIVELY_DANGEROUS
-#define TEST_CALL_RECURSIVE_CLEAN
+// #define TEST_CALL_RECURSIVE_CLEAN
 // #define TEST_CALL_RECURSIVE_DANGEROUS
 
 // ... (existing global variables and stub functions) ...
